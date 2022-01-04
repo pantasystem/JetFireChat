@@ -76,5 +76,9 @@ class MessagesViewModel: ViewModel(){
 
     }
 
+    fun setRoomId(roomId: String) {
+        _roomId.value = roomId
+    }
+
 
 }

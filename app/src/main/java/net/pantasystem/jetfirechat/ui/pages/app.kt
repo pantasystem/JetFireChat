@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 data class NavItem(
@@ -91,6 +93,15 @@ fun App() {
                 }
                 composable("rooms/create") {
                     RoomEditor(navController = navController)
+                }
+                composable(
+                    "rooms/{roomId}",
+                    arguments = listOf(
+                        navArgument("roomId") { type = NavType.StringType }
+                    )
+                ) {
+                    val roomId = it.arguments?.getString("roomId")
+                    MessagingPage(roomId!!)
                 }
             }
         }

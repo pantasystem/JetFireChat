@@ -22,17 +22,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.pantasystem.jetfirechat.models.MessageView
+import net.pantasystem.jetfirechat.viewmodel.AuthState
+import net.pantasystem.jetfirechat.viewmodel.AuthViewModel
 import net.pantasystem.jetfirechat.viewmodel.MessagesViewModel
 
 @ExperimentalCoroutinesApi
 @Composable
 fun MessagingPage(
-    myId: String,
-    messageViewModel: MessagesViewModel = viewModel()
+    roomId: String,
+    messageViewModel: MessagesViewModel = viewModel(),
+    authViewModel: AuthViewModel = viewModel()
 ) {
+
+    val authState by authViewModel.state.collectAsState()
+    val myId = (authState as? AuthState.Authorized)?.user?.uid
 
     var text: String by remember {
         mutableStateOf("")
+    }
+
+    LaunchedEffect(Unit) {
+        messageViewModel.setRoomId(roomId)
     }
 
     val messages by messageViewModel.messages.collectAsState(initial = emptyList())
@@ -47,7 +57,7 @@ fun MessagingPage(
             Messages(
                 messages = messages,
                 modifier = Modifier.weight(1f),
-                myId = myId,
+                myId = myId ?: "",
                 onAvatarClicked = {}
             )
 

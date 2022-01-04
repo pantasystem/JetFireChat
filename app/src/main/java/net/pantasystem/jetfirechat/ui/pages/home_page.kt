@@ -1,7 +1,8 @@
 package net.pantasystem.jetfirechat.ui.pages
 
-
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -19,6 +20,7 @@ import net.pantasystem.jetfirechat.viewmodel.RoomsViewModel
 
 @Composable
 @ExperimentalCoroutinesApi
+@OptIn(ExperimentalMaterialApi::class)
 fun HomePage(navController: NavController, roomsViewModel: RoomsViewModel = viewModel()) {
 
     val rooms by roomsViewModel.rooms.collectAsState(initial = emptyList())
@@ -43,9 +45,17 @@ fun HomePage(navController: NavController, roomsViewModel: RoomsViewModel = view
         ) {
             items(rooms.size) { index ->
                 Card(
-                    Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        navController.navigate("rooms/${rooms[index].id}")
+                    }
                 ) {
-                    Text(rooms[index].name)
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                    ) {
+                        Text(rooms[index].name)
+                    }
                 }
             }
         }
