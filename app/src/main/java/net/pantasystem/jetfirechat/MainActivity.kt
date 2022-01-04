@@ -8,16 +8,32 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.ktx.initialize
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.pantasystem.jetfirechat.models.MessageView
 import net.pantasystem.jetfirechat.models.User
+import net.pantasystem.jetfirechat.ui.pages.App
 import net.pantasystem.jetfirechat.ui.pages.MessagingPage
 import net.pantasystem.jetfirechat.ui.theme.JetFireChatTheme
+import net.pantasystem.jetfirechat.viewmodel.MessagesViewModel
+import net.pantasystem.jetfirechat.viewmodel.RoomsViewModel
 import java.util.*
 
+@ExperimentalCoroutinesApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Firebase.initialize(applicationContext)
+        ViewModelProvider(this, MessagesViewModel.Factory())[MessagesViewModel::class.java]
+        ViewModelProvider(this)[RoomsViewModel::class.java]
+
         setContent {
             MdcTheme {
 
@@ -71,10 +87,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                MessagingPage(
-                    list = messages,
-                    myId = "hoge"
-                )
+                App()
             }
 
         }

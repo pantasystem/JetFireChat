@@ -10,11 +10,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,18 +18,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.pantasystem.jetfirechat.models.MessageView
+import net.pantasystem.jetfirechat.viewmodel.MessagesViewModel
 
+@ExperimentalCoroutinesApi
 @Composable
 fun MessagingPage(
-    list: List<MessageView>,
     myId: String,
+    messageViewModel: MessagesViewModel = viewModel()
 ) {
 
     var text: String by remember {
         mutableStateOf("")
     }
+
+    val messages by messageViewModel.messages.collectAsState(initial = emptyList())
     Scaffold(
         topBar = {
             TopAppBar {
@@ -43,7 +45,7 @@ fun MessagingPage(
     ) {
         Column {
             Messages(
-                messages = list,
+                messages = messages,
                 modifier = Modifier.weight(1f),
                 myId = myId,
                 onAvatarClicked = {}
@@ -52,7 +54,8 @@ fun MessagingPage(
             Surface {
                 Row {
                     Box(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                             .padding(horizontal = 8.dp)
                             .height(52.dp)
                             .fillMaxWidth(),
