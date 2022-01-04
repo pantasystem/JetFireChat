@@ -4,10 +4,9 @@ package net.pantasystem.jetfirechat.ui.pages
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +26,15 @@ fun HomePage(navController: NavController, roomsViewModel: RoomsViewModel = view
         topBar = {
             TopAppBar {
                 Text("ホーム")
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate("rooms/create")
+                }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "部屋を追加する")
             }
         }
     ) {
