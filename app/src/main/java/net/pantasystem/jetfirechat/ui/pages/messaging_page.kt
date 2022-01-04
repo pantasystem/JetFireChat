@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import net.pantasystem.jetfirechat.models.MessageView
@@ -64,7 +65,9 @@ fun MessagingPage(
                 onAvatarClicked = {}
             )
 
-            Surface {
+            Surface(
+                modifier = Modifier.navigationBarsWithImePadding()
+            ) {
                 Row {
                     Box(
                         modifier = Modifier
