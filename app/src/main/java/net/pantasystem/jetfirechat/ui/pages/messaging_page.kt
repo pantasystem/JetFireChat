@@ -1,5 +1,6 @@
 package net.pantasystem.jetfirechat.ui.pages
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import net.pantasystem.jetfirechat.models.MessageView
 import net.pantasystem.jetfirechat.viewmodel.AuthState
 import net.pantasystem.jetfirechat.viewmodel.AuthViewModel
@@ -34,6 +36,7 @@ fun MessagingPage(
     authViewModel: AuthViewModel = viewModel()
 ) {
 
+    val coroutineScope = rememberCoroutineScope()
     val authState by authViewModel.state.collectAsState()
     val myId = (authState as? AuthState.Authorized)?.user?.uid
 
@@ -76,7 +79,8 @@ fun MessagingPage(
                             Text("本文を入力")
                         }
                         BasicTextField(
-                            value = text, onValueChange = { t -> text = t },
+                            value = text,
+                            onValueChange = { t -> text = t },
                             modifier = Modifier
                                 .fillMaxWidth(),
                             maxLines = 1,
@@ -85,7 +89,18 @@ fun MessagingPage(
                         )
                     }
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            Log.d("MessagingViewModel", "text:$text")
+                            coroutineScope.launch {
+                                runCatching {
+                                    messageViewModel.create(
+                                        text
+                                    )
+                                }.onSuccess {
+                                    text = ""
+                                }
+                            }
+                        },
                         modifier = Modifier.size(52.dp)
                     ) {
                         Icon(Icons.Default.Send, contentDescription = "送信")

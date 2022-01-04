@@ -62,6 +62,7 @@ class MessagesViewModel: ViewModel(){
 
     suspend fun create(text: String) {
         val currentUser = FirebaseAuth.getInstance().currentUser
+        Log.d("MessagesViewModel", "create text:$text")
         Firebase.firestore.collection("rooms")
             .document(_roomId.value!!)
             .collection("messages")
